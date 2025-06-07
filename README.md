@@ -1,38 +1,42 @@
-🧠 AI-Powered Collaborative Document Editor
-A full-stack, real-time collaborative document editor built with Next.js, Tailwind CSS, Clerk, Firebase, Liveblocks, and Google Gemini API. This application allows users to sign in securely, manage organizations and workspaces, collaborate on documents in real-time, and generate AI-based content using Gemini API.
+# 🧠 AI-Powered Collaborative Document Editor
 
-🚀 Key Features
-🔐 Authentication using Clerk (Email & Social Login)
-🏢 Organization and Workspace management
-🎨 Beautiful UI with Tailwind CSS
-⚙️ Firebase backend for real-time data handling
-🤖 AI document generation using Google Gemini API
-💬 Live comments and notifications with Liveblocks
-📝 Rich-text editing with Editor.js
-👥 Real-time collaboration across multiple users
-☁️ Easy deployment to Vercel or any cloud provider
-🛠️ Tech Stack
-Frontend: Next.js
-Styling: Tailwind CSS
-Authentication: Clerk
-Database/Backend: Firebase
-AI Integration: Google Gemini API
-Realtime Collaboration: Liveblocks
-Text Editor: Editor.js
-📚 Functionality Overview Authentication: Secure email/password & social login flows powered by Clerk.
+A full-stack, real-time collaborative document editor built with **Next.js**, **Tailwind CSS**, **Clerk**, **Firebase**, **Liveblocks**, and **Google Gemini API**. This application allows users to sign in securely, manage organizations and workspaces, collaborate on documents in real-time, and generate AI-based content using Gemini API.
 
-Workspace Management: Create and organize workspaces within organizations.
+---
 
-Collaborative Editing: Real-time document collaboration with Editor.js + Liveblocks.
+## 🚀 Key Features
 
-AI-Powered Templates: Auto-generate document templates using the Gemini API.
+- 🔐 Authentication using Clerk (Email & Social Login)
+- 🏢 Organization and Workspace management
+- 🎨 Beautiful UI with Tailwind CSS
+- ⚙️ Firebase backend for real-time data handling
+- 🤖 AI document generation using Google Gemini API
+- 💬 Live comments and notifications with Liveblocks
+- 📝 Rich-text editing with Editor.js
+- 👥 Real-time collaboration across multiple users
+- ☁️ Easy deployment to Vercel or any cloud provider
 
-Comments & Notifications: Engage with documents and receive instant updates.
+---
 
-📦 Getting Started
+## 🛠️ Tech Stack
+
+- **Frontend**: [Next.js](https://nextjs.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Authentication**: [Clerk](https://clerk.dev/)
+- **Database/Backend**: [Firebase](https://firebase.google.com/)
+- **AI Integration**: [Google Gemini API](https://ai.google.dev/)
+- **Realtime Collaboration**: [Liveblocks](https://liveblocks.io/)
+- **Text Editor**: [Editor.js](https://editorjs.io/)
+
+---
+
+## 📦 Getting Started
+
 Follow these steps to run the project locally:
 
-1. Clone the Repository, Install Dependencies, Configure Environment, and Run the App
+### 1. Clone the Repository, Install Dependencies, Configure Environment, and Run the App
+
+bash
 # Clone the repository
 git clone https://github.com/your-username/your-repo-name.git
 cd your-repo-name

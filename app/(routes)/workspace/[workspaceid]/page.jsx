@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import SideNav from "./[documentid]/_components/SideNav";
 import { Room } from "@/app/Room";

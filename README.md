@@ -30,13 +30,26 @@ A full-stack, real-time collaborative document editor built with **Next.js**, **
 
 ---
 
+📚 Functionality Overview  
+Authentication: Secure email/password & social login flows powered by Clerk.
+
+Workspace Management: Create and organize workspaces within organizations.
+
+Collaborative Editing: Real-time document collaboration with Editor.js + Liveblocks.
+
+AI-Powered Templates: Auto-generate document templates using the Gemini API.
+
+Comments & Notifications: Engage with documents and receive instant updates.
+
+---
+
 ## 📦 Getting Started
 
 Follow these steps to run the project locally:
 
 ### 1. Clone the Repository, Install Dependencies, Configure Environment, and Run the App
 
-bash
+```bash
 # Clone the repository
 git clone https://github.com/your-username/your-repo-name.git
 cd your-repo-name
@@ -46,15 +59,4 @@ npm install
 
 # Create environment file
 touch .env.local
-
-Then, add the following to your .env.local file:
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your-clerk-publishable-key
-CLERK_SECRET_KEY=your-clerk-secret-key
-FIREBASE_API_KEY=your-firebase-api-key
-GEMINI_API_KEY=your-google-gemini-api-key
-
-Now, run the development server:
-npm run dev
-
-Open your browser and visit:
-http://localhost:3000
+```

@@ -15,7 +15,7 @@ import uuid4 from "uuid4";
 function CreateWorkspace() {
   const [coverImage, setCoverImage] = useState("/cover.png");
   const [workspaceName, setWorkspaceName] = useState();
-  const [emoji, setEmoji] = useState();
+  const [emoji, setEmoji] = useState(""); // Changed from useState() to useState("")
   const { user } = useUser();
   const { orgId } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -29,7 +29,7 @@ function CreateWorkspace() {
     const workspaceId = Date.now();
     const result = await setDoc(doc(db, "Workspace", workspaceId.toString()), {
       workspaceName: workspaceName,
-      emoji: emoji,
+      emoji: emoji || null, // Store null if emoji is empty string
       coverImage: coverImage,
       createdBy: user?.primaryEmailAddress?.emailAddress,
       id: workspaceId,

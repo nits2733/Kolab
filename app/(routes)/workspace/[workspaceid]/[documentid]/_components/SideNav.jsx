@@ -5,6 +5,7 @@ import { db } from "@/config/firebaseConfig";
 import {
   collection,
   doc,
+  getDoc,
   onSnapshot,
   query,
   setDoc,
@@ -25,6 +26,7 @@ const MAX_FILE = 5;
 function SideNav({ params }) {
   const [documentList, setDocumentList] = useState([]);
   const [resolvedParams, setResolvedParams] = useState(null);
+  const [workspaceName, setWorkspaceName] = useState("Workspace");
   const { user } = useUser();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -34,7 +36,6 @@ function SideNav({ params }) {
     const resolveParams = async () => {
       try {
         const awaitedParams = await params;
-        // console.log("Resolved params:", awaitedParams);
         setResolvedParams(awaitedParams);
       } catch (error) {
         console.error("Error resolving params:", error);
@@ -46,6 +47,26 @@ function SideNav({ params }) {
     }
   }, [params]);
 
+  // Fetch workspace name from Firestore
+  useEffect(() => {
+    const fetchWorkspaceName = async () => {
+      if (resolvedParams?.workspaceid) {
+        try {
+          const workspaceRef = doc(db, "Workspace", resolvedParams.workspaceid);
+          const workspaceSnap = await getDoc(workspaceRef);
+          if (workspaceSnap.exists()) {
+            setWorkspaceName(workspaceSnap.data().workspaceName || "Workspace");
+          }
+        } catch (err) {
+          console.error("Error fetching workspace name:", err);
+        }
+      }
+    };
+
+    fetchWorkspaceName();
+  }, [resolvedParams]);
+
+  // Get list of documents in workspace
   useEffect(() => {
     if (
       resolvedParams?.workspaceid &&
@@ -55,34 +76,21 @@ function SideNav({ params }) {
     }
   }, [resolvedParams]);
 
-  /**
-   * Used to get Document List
-   */
   const GetDocumentList = () => {
-    if (
-      !resolvedParams?.workspaceid ||
-      resolvedParams.workspaceid === "undefined"
-    ) {
-      console.error("Invalid workspace ID:", resolvedParams?.workspaceid);
-      return;
-    }
-
     const q = query(
       collection(db, "workspaceDocuments"),
       where("workspaceId", "==", Number(resolvedParams.workspaceid))
     );
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      setDocumentList([]);
 
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const docs = [];
       querySnapshot.forEach((doc) => {
-        setDocumentList((documentList) => [...documentList, doc.data()]);
+        docs.push(doc.data());
       });
+      setDocumentList(docs);
     });
   };
 
-  /**
-   * Create New Document
-   */
   const CreateNewDocument = async () => {
     if (
       !resolvedParams?.workspaceid ||
@@ -95,10 +103,10 @@ function SideNav({ params }) {
     if (documentList?.length >= MAX_FILE) {
       toast("Upgrade to add new file", {
         description:
-          "You reach max file, Please upgrad for unlimited file creation",
+          "You reached max file limit. Please upgrade for unlimited file creation.",
         action: {
           label: "Upgrade",
-          onClick: () => console.log("Undo"),
+          onClick: () => console.log("Upgrade clicked"),
         },
       });
       return;
@@ -106,7 +114,8 @@ function SideNav({ params }) {
 
     setLoading(true);
     const docId = uuid4();
-    await setDoc(doc(db, "workspaceDocuments", docId.toString()), {
+
+    await setDoc(doc(db, "workspaceDocuments", docId), {
       workspaceId: Number(resolvedParams.workspaceid),
       createdBy: user?.primaryEmailAddress?.emailAddress,
       coverImage: null,
@@ -116,54 +125,51 @@ function SideNav({ params }) {
       documentOutput: [],
     });
 
-    await setDoc(doc(db, "documentOutput", docId.toString()), {
+    await setDoc(doc(db, "documentOutput", docId), {
       docId: docId,
       output: [],
     });
 
     setLoading(false);
-    router.replace("/workspace/" + resolvedParams.workspaceid + "/" + docId);
+    router.replace(`/workspace/${resolvedParams.workspaceid}/${docId}`);
   };
 
-  // Don't render until params are resolved
   if (!resolvedParams) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div
-      className="h-screen md:w-72 
-    hidden md:block fixed bg-blue-50 p-5 shadow-md"
-    >
+    <div className="h-screen md:w-72 hidden md:block fixed bg-blue-50 p-5 shadow-md">
       <div className="flex justify-between items-center">
         <Logo />
         <NotificationBox>
           <Bell className="h-5 w-5 text-gray-500" />
         </NotificationBox>
       </div>
-      <hr className="my-5"></hr>
+      <hr className="my-5" />
       <div>
         <div className="flex justify-between items-center">
-          <h2 className="font-medium">Workspace Name</h2>
+          <h2 className="font-medium truncate" title={workspaceName}>
+            {workspaceName}
+          </h2>
           <Button size="sm" className="text-lg" onClick={CreateNewDocument}>
             {loading ? <Loader2Icon className="h-4 w-4 animate-spin" /> : "+"}
           </Button>
         </div>
       </div>
 
-      {/* Document List  */}
+      {/* Document List */}
       <DocumentList documentList={documentList} params={resolvedParams} />
 
-      {/* Progress Bar  */}
-
+      {/* Progress Bar */}
       <div className="absolute bottom-10 w-[85%]">
         <Progress value={(documentList?.length / MAX_FILE) * 100} />
         <h2 className="text-sm font-light my-2">
-          <strong>{documentList?.length}</strong> Out of <strong>5</strong>{" "}
+          <strong>{documentList?.length}</strong> out of <strong>5</strong>{" "}
           files used
         </h2>
-        <h2 className="text-sm font-light ">
-          Upgrade your plan for unlimted access
+        <h2 className="text-sm font-light">
+          Upgrade your plan for unlimited access
         </h2>
       </div>
     </div>
